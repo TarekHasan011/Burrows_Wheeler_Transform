@@ -22,10 +22,8 @@ string itos(int x)
     reverse(str.begin(),str.end());
     return str;
 }
-string encode(string &str)
+string encode(string str)
 {
-    to_lower(str);
-    str+='$';
     string temp = str;
     vector< string > strings;
     for(int i=0;i<str.size();i++)
@@ -40,7 +38,6 @@ string encode(string &str)
     for(string s : strings)
         encoded_string+=s.back();
 
-    /*cout << "Encoded String : " << encoded_string << "\n";
     stack< pair< char , int > > st;
     for(char c : encoded_string)
     {
@@ -54,17 +51,18 @@ string encode(string &str)
         }
     }
     string final_encoded_string = "";
+
     while(!st.empty())
     {
         auto x = st.top();
         st.pop();
-        final_encoded_string = x.first + itos(x.second) + final_encoded_string;
+        final_encoded_string = (x.second>1 ? itos(x.second) : "") + x.first + final_encoded_string;
     }
-    return final_encoded_string;*/
+    cout << "Run Length : " << final_encoded_string.length() << "\n";
     return encoded_string;
 }
 
-string decode(string &str)
+string decode(string str)
 {
     string last_column = str;
     string first_column = str;
@@ -103,10 +101,21 @@ int main()
         freopen("input.txt","r",stdin);
     #endif // TarekHasan
     string str; cin >> str;
-    string encoded_string = encode(str);
+    to_lower(str);
+    str+='$';
+
     cout << "Original String : " << str << "\n";
+
+    string encoded_string = encode(str);
     cout << "Encoded String : " << encoded_string << "\n";
+
     string decoded_string = decode(encoded_string);
     cout << "Decoded String : " << decoded_string << "\n";
+
+    if(str==decoded_string)
+        cout << "Matched!!\n";
+    else
+        cout << "Mismatched\n";
+
     return 0;
 }
