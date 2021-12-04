@@ -64,16 +64,49 @@ string encode(string &str)
     return encoded_string;
 }
 
+string decode(string &str)
+{
+    string last_column = str;
+    string first_column = str;
+    sort(first_column.begin(),first_column.end());
+
+    map< char , int > mp;
+    vector< pair< char , int > > _last_column;
+    for(char c : last_column) _last_column.push_back({c,mp[c]++});
+    mp.clear();
+    map< pair< char , int > , int > first_column_index;
+    for(int i=0;i<first_column.size();i++)
+    {
+        first_column_index[{first_column[i], mp[first_column[i]]++}] = i;
+    }
+    mp.clear();
+
+    string decoded_string = "";
+
+    pair< char , int > temp{'$',0};
+
+    while(_last_column[first_column_index[temp]].first!='$')
+    {
+        decoded_string+=temp.first;
+        temp = _last_column[first_column_index[temp]];
+    }
+    decoded_string+=temp.first;
+
+    reverse(decoded_string.begin(),decoded_string.end());
+    return decoded_string;
+
+}
 
 int main()
 {
     #ifdef TarekHasan
-        freopen("temp.txt","r",stdin);
+        freopen("input.txt","r",stdin);
     #endif // TarekHasan
     string str; cin >> str;
     string encoded_string = encode(str);
     cout << "Original String : " << str << "\n";
     cout << "Encoded String : " << encoded_string << "\n";
-
+    string decoded_string = decode(encoded_string);
+    cout << "Decoded String : " << decoded_string << "\n";
     return 0;
 }
